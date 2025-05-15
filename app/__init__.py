@@ -23,15 +23,6 @@ def create_app(config_class=Config):
     # Register all blueprints
     register_blueprints(app)
 
-    @app.before_first_request
-    def re_create_db_connection():
-        # this is done to re-establish DB connections, otherwise some connections are stuck after the gunicorn fork
-        try:
-            con = db.session.connection()
-            con.engine.dispose()
-        except Exception as exc:
-            app.logger.warning('Cant init db connection: %s' % exc)
-
     # Initialize database tables
     with app.app_context():
         # init_db()
@@ -54,5 +45,6 @@ def create_app(config_class=Config):
                               )
                           """))
         db.session.commit()
-    
+        con = db.session.connection()
+        con.engine.dispose()
         return app
