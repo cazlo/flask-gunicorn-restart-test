@@ -16,4 +16,4 @@ COPY . .
 EXPOSE 8000
 
 # Run Gunicorn with our configuration
-CMD ["gunicorn", "--config", "gunicorn_config.py", "app:app"]
+CMD ["gunicorn", "--config", "gunicorn_config.py", "wsgi:app"]

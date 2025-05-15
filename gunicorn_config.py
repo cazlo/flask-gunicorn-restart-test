@@ -16,8 +16,8 @@ workers = int(os.environ.get("GUNICORN_WORKERS", multiprocessing.cpu_count() * 2
 worker_class = "sync"
 
 # The maximum number of requests a worker will process before restarting
-max_requests = 100
-max_requests_jitter = 0
+# max_requests = 100
+max_requests_jitter = 10
 
 threads = 10
 
@@ -89,3 +89,5 @@ logconfig_dict = {
 accesslog = "false"  # Log to stdout
 errorlog = "-"  # Log to stdout
 access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s" %(L)s'
+
+preload_app=False
