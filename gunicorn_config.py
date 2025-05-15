@@ -16,8 +16,10 @@ workers = int(os.environ.get("GUNICORN_WORKERS", multiprocessing.cpu_count() * 2
 worker_class = "sync"
 
 # The maximum number of requests a worker will process before restarting
-max_requests = 1000
-max_requests_jitter = 50
+max_requests = 100
+max_requests_jitter = 0
+
+threads = 10
 
 # Timeout (in seconds) for a request to be processed
 timeout = 30
