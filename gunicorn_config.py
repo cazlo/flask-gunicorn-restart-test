@@ -5,8 +5,8 @@ import logging
 import sys
 from datetime import datetime
 
-# Bind to 0.0.0.0:8000
-bind = "0.0.0.0:8000"
+# Network binding
+bind = os.environ.get("GUNICORN_BIND", "0.0.0.0:8000")
 
 # Number of worker processes
 # A good rule of thumb is 2-4 workers per CPU core
@@ -16,16 +16,28 @@ workers = int(os.environ.get("GUNICORN_WORKERS", multiprocessing.cpu_count() * 2
 worker_class = "sync"
 
 # The maximum number of requests a worker will process before restarting
-# max_requests = 100
-max_requests_jitter = 10
+# Helps prevent memory leaks by recycling workers. 0 -> no restarts
+max_requests = int(os.environ.get("GUNICORN_MAX_REQUESTS", "0"))
 
-threads = 10
+# Add jitter to max_requests to avoid all workers restarting at once
+max_requests_jitter = int(os.environ.get("GUNICORN_MAX_REQUESTS_JITTER", "10"))
+
+# Enable SO_REUSEPORT for better performance (Linux 3.9+)
+reuse_port = os.environ.get("GUNICORN_REUSE_PORT", "True").lower() == "true"
+
+# Pre-load application code before forking worker processes
+preload_app = os.environ.get("GUNICORN_PRELOAD_APP", "True").lower() == "true"
+
+# Number of threads per worker
+threads = int(os.environ.get("GUNICORN_THREADS", "10"))
 
 # Timeout (in seconds) for a request to be processed
-timeout = 30
+timeout = int(os.environ.get("GUNICORN_TIMEOUT", "30"))
+
+################### Logging
 
 # Log level
-loglevel = "info"
+loglevel = os.environ.get("GUNICORN_LOG_LEVEL", "info")
 
 # Custom formatter that properly shows milliseconds
 class MillisecondFormatter(logging.Formatter):
@@ -87,5 +99,3 @@ logconfig_dict = {
 accesslog = "false"  # Log to stdout
 errorlog = "-"  # Log to stdout
 access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s" %(L)s'
-
-preload_app=False

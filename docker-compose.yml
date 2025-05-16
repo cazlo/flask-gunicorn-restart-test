@@ -4,12 +4,20 @@ services:
     ports:
       - "8000:8000"
     environment:
+      # Database configuration
       - DB_USER=postgres
       - DB_PASSWORD=postgres
       - DB_HOST=db
       - DB_PORT=5432
       - DB_NAME=flask_app
-      - GUNICORN_WORKERS=4
+
+      # Gunicorn configuration
+#      - GUNICORN_WORKERS=32
+      - GUNICORN_MAX_REQUESTS=100
+      - GUNICORN_MAX_REQUESTS_JITTER=10
+#      - GUNICORN_REUSE_PORT=True
+      - GUNICORN_PRELOAD_APP=True
+#      - GUNICORN_THREADS=10
     depends_on:
       db:
         condition: service_healthy
