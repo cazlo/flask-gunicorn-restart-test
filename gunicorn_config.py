@@ -13,7 +13,7 @@ bind = os.environ.get("GUNICORN_BIND", "0.0.0.0:8000")
 workers = int(os.environ.get("GUNICORN_WORKERS", multiprocessing.cpu_count() * 2 + 1))
 
 # Worker class to use
-worker_class = "gunicorn_worker_fix.ThreadWorkerSync"
+worker_class = "uvicorn.workers.UvicornWorker"
 
 # The maximum number of requests a worker will process before restarting
 # Helps prevent memory leaks by recycling workers. 0 -> no restarts

@@ -12,12 +12,12 @@ services:
       - DB_NAME=flask_app
 
       # Gunicorn configuration
-#      - GUNICORN_WORKERS=32
+      - GUNICORN_WORKERS=4
       - GUNICORN_MAX_REQUESTS=100
       - GUNICORN_MAX_REQUESTS_JITTER=10
-#      - GUNICORN_REUSE_PORT=True
+      - GUNICORN_REUSE_PORT=False
       - GUNICORN_PRELOAD_APP=True
-#      - GUNICORN_THREADS=10
+      - GUNICORN_THREADS=20
     depends_on:
       db:
         condition: service_healthy

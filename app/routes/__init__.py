@@ -1,9 +1,9 @@
 # app/routes/__init__.py
-from .main import main_bp
-from .health import health_bp
+from fastapi import FastAPI
+from .main import main_router
+from .health import health_router
 
-
-def register_blueprints(app):
-    """Register all blueprints with the application"""
-    app.register_blueprint(main_bp)
-    app.register_blueprint(health_bp)
+def register_routers(app: FastAPI):
+    """Register all routers with the FastAPI application"""
+    app.include_router(main_router)
+    app.include_router(health_router)
